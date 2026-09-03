@@ -33,6 +33,10 @@ The script can be run from top to bottom and includes verification queries at th
 
 The repository includes a small workflow in [`.github/workflows/part1-ci.yml`](.github/workflows/part1-ci.yml). It checks that the main Part 1 files are present and that the endpoint plan and SQL script contain the expected sections.
 
+## Video
+
+Part 1 walkthrough: **[YouTube link](PASTE_YOUR_UNLISTED_YOUTUBE_LINK_HERE)**
+
 ## Repository structure
 
 ```text
