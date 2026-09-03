@@ -6,6 +6,8 @@
 
 This endpoint plan follows the RaceDay roles and minimum functionality specified by The Independent Institute of Education (The IIE, 2026).
 
+There are 30 planned endpoints across authentication, profiles, events, categories, enrolments, results, routes, and weather. The supporting conventions in [`docs/RaceDay_API_Conventions.md`](RaceDay_API_Conventions.md) define the shared URL, validation, response, and security rules.
+
 ## Roles and access rules
 
 | Role value | Meaning |
