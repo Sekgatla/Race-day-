@@ -1,5 +1,13 @@
 # RaceDay Event Management System
 
+> **Assessment scope:** PROG6212 Programming 2B — PoE Part 1
+
+## Project status
+
+RaceDay Part 1 is complete as a planning and database-design submission. The repository contains the system plan, seven-entity ERD, SQL Server database script, REST endpoint plan, Harvard Anglia references, and automated documentation checks.
+
+Parts 2 and 3 are intentionally out of scope for this submission. They will implement the API and MVC application described by the Part 1 plan.
+
 RaceDay is a web-based event management system for South African road running, walking, and cycling events. It replaces paper registrations, disconnected spreadsheets, and manual result tracking with one planned system for organisers and participants.
 
 ## User roles
@@ -45,7 +53,8 @@ RaceDay/
 │   ├── RaceDay_ERD.dot
 │   ├── RaceDay_ERD.pdf
 │   ├── RaceDay_API_Endpoint_Plan.md
-│   └── RaceDay_Database.sql
+│   ├── RaceDay_Database.sql
+│   └── RaceDay_References.md
 └── .github/
     └── workflows/
         └── part1-ci.yml
@@ -71,9 +80,9 @@ The [`part1-ci.yml`](.github/workflows/part1-ci.yml) workflow checks that:
 - The README exists.
 - Required API sections and SQL entities/roles are present.
 
-After pushing this repository to GitHub, open the **Actions** tab and confirm that the workflow completes with a green check. Add the screenshot of that successful run to this README before final submission:
+The workflow is designed to run on every push and pull request. It checks the repository structure, required deliverables, API-plan sections, SQL entities, and role markers. After the workflow completes on GitHub, the successful run should be recorded below:
 
-> **CI screenshot:** Add the successful GitHub Actions screenshot here after the first pushed workflow run.
+> **CI evidence:** The successful GitHub Actions screenshot will be added here after the first remote workflow run.
 
 ## Video presentation
 
@@ -88,6 +97,6 @@ The RaceDay Part 1 planning decisions are based on the supplied assessment guide
 ## Submission reminders
 
 - Use the GitHub repository supplied for the assessment.
-- Build a meaningful commit history with at least 20 genuine commits; do not create artificial or repetitive commits.
+- Maintain at least 20 genuine commits that represent meaningful planning, design, documentation, or validation work.
 - Push all work to GitHub rather than submitting a ZIP file.
 - Add the green CI screenshot and unlisted YouTube link before submitting the repository link on ARC.
