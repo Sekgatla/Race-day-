@@ -44,6 +44,17 @@ Part 1 is the planning and database stage. The API and MVC application are inten
 | SQL Database Script | [`docs/RaceDay_Database.sql`](docs/RaceDay_Database.sql) | SQL Server script that creates, constrains, and seeds the RaceDay database. |
 | Harvard Anglia references | [`docs/RaceDay_References.md`](docs/RaceDay_References.md) | Reference list for the assessment guide used as the planning source. |
 
+Supporting planning notes:
+
+- [`docs/RaceDay_Data_Dictionary.md`](docs/RaceDay_Data_Dictionary.md) — field meanings and integrity rules.
+- [`docs/RaceDay_Role_Permissions.md`](docs/RaceDay_Role_Permissions.md) — organiser and participant permissions.
+- [`docs/RaceDay_Design_Assumptions.md`](docs/RaceDay_Design_Assumptions.md) — scope and modelling assumptions.
+- [`docs/RaceDay_API_Conventions.md`](docs/RaceDay_API_Conventions.md) — shared endpoint and security conventions.
+- [`docs/RaceDay_Seed_Data_Catalogue.md`](docs/RaceDay_Seed_Data_Catalogue.md) — seeded records and verification purpose.
+- [`docs/RaceDay_Validation_Plan.md`](docs/RaceDay_Validation_Plan.md) — automated and SSMS validation steps.
+- [`docs/RaceDay_ERD_Notes.md`](docs/RaceDay_ERD_Notes.md) — entity purpose and cardinality decisions.
+- [`docs/RaceDay_Submission_Checklist.md`](docs/RaceDay_Submission_Checklist.md) — final evidence checklist.
+
 ## Repository structure
 
 ```text
