@@ -7,6 +7,11 @@
     recreates the seven planning tables, applies constraints, and inserts
     realistic sample data.
 
+    Part 1 design coverage:
+      Users, Events, Categories, Enrolments, Results, Routes, EventWeather.
+    Enrolments resolves the participant/event many-to-many relationship.
+    Results.EnrolmentID is unique so an enrolment has at most one result.
+
     Planning basis: The Independent Institute of Education (The IIE) (2026),
     PROG6212 - Programming 2B: PoE Part 1 assessment breakdown.
 
