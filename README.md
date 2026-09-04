@@ -99,7 +99,7 @@ The workflow in [.github/workflows/part1-ci.yml](.github/workflows/part1-ci.yml)
 
 The presentation uses my own voiceover and explains the repository, ERD decisions, API plan, SQL design, live SSMS execution, seeded data and the successful CI build.
 
-> **Unlisted YouTube link:** _Add the final unlisted video URL here before submission._
+> **Unlisted YouTube link:** https://youtu.be/SWQssPZqI5k
 
 ## Repository layout
 
@@ -113,3 +113,21 @@ Race-day-/
 │   ├── RaceDay_Database.sql
 │   └── ci-green-build.png
 └── .github/workflows/part1-ci.yml
+
+
+## References
+
+References
+Google, 2026. Gemini (Large language model). Available at: https://gemini.google.com 
+
+Graphviz, 2026. Graphviz - Graph Visualization Software. Available at: https://graphviz.org/.
+
+Lucid Software Inc., 2026. Lucidchart diagramming application. Available at: https://www.lucidchart.com.
+
+Microsoft, 2026a. GitHub Actions Documentation. Available at: https://docs.github.com/en/actions.
+
+Microsoft, 2026b. Microsoft Visio. Available at: https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software.
+
+https://onecompiler.com/sqlserver#draft-uvtk.
+
+Note: Artificial Intelligence assistance (Google Gemini) was utilized for formatting, Markdown structure optimization, and generating academic citations in Harvard Anglia style.
