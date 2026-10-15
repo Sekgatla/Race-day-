@@ -165,7 +165,7 @@ The supplied screenshot is the successful **Part 1** documentation workflow:
 
 ![Successful Part 1 GitHub Actions build](docs/ci-green-build.png)
 
-> The Part 2 workflow has passed; [open its run history](https://github.com/Sekgatla/Race-day-/actions/workflows/part2-ci.yml). A screenshot of the successful Part 2 run has not been added yet. Capture and add it here before final submission; the Part 1 image above is not a substitute.
+> The Part 2 workflow has passed;(doc/IMG_5128.png)
 
 ### Video Presentation
 The presentations should show the running API and explain the code and design decisions. The Part 2 guide expects a voiceover walkthrough of the repository, data model, authentication, role restrictions, Swagger, tests, and green CI build.
