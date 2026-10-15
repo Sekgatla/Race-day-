@@ -1,0 +1,141 @@
+digraph RaceDayERD {
+  graph [
+    rankdir=LR,
+    bgcolor="white",
+    pad="0.35",
+    nodesep="0.65",
+    ranksep="1.05",
+    fontname="Arial",
+    labelloc="t",
+    label="RaceDay Event Management System — Entity Relationship Diagram",
+    fontsize=22
+  ];
+
+  node [
+    shape=plain,
+    fontname="Arial",
+    fontsize=10
+  ];
+
+  edge [
+    color="#334155",
+    penwidth=1.4,
+    fontname="Arial",
+    fontsize=9,
+    fontcolor="#334155"
+  ];
+
+  Users [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#0f766e">
+      <TR><TD BGCOLOR="#0f766e"><FONT COLOR="white"><B>USERS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#0f766e"><B>PK UserID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT">FirstName NVARCHAR(50)</TD></TR>
+      <TR><TD ALIGN="LEFT">LastName NVARCHAR(50)</TD></TR>
+      <TR><TD ALIGN="LEFT">Email NVARCHAR(255) UNIQUE</TD></TR>
+      <TR><TD ALIGN="LEFT">PasswordHash NVARCHAR(255)</TD></TR>
+      <TR><TD ALIGN="LEFT">Role VARCHAR(20)</TD></TR>
+      <TR><TD ALIGN="LEFT">PhoneNumber NVARCHAR(25) NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">CreatedAt DATETIME2</TD></TR>
+      <TR><TD ALIGN="LEFT">IsActive BIT</TD></TR>
+    </TABLE>
+  >];
+
+  Events [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#1d4ed8">
+      <TR><TD BGCOLOR="#1d4ed8"><FONT COLOR="white"><B>EVENTS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#1d4ed8"><B>PK EventID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#1d4ed8"><B>FK OrganiserID</B></FONT> INT</TD></TR>
+      <TR><TD ALIGN="LEFT">EventName NVARCHAR(150)</TD></TR>
+      <TR><TD ALIGN="LEFT">Description NVARCHAR(1000)</TD></TR>
+      <TR><TD ALIGN="LEFT">EventDate DATE</TD></TR>
+      <TR><TD ALIGN="LEFT">StartTime TIME(0)</TD></TR>
+      <TR><TD ALIGN="LEFT">Location NVARCHAR(150)</TD></TR>
+      <TR><TD ALIGN="LEFT">Province NVARCHAR(50)</TD></TR>
+      <TR><TD ALIGN="LEFT">EventType VARCHAR(20)</TD></TR>
+      <TR><TD ALIGN="LEFT">DistanceKm DECIMAL(6,2)</TD></TR>
+      <TR><TD ALIGN="LEFT">MaxParticipants INT</TD></TR>
+      <TR><TD ALIGN="LEFT">Status VARCHAR(20)</TD></TR>
+      <TR><TD ALIGN="LEFT">CreatedAt DATETIME2</TD></TR>
+    </TABLE>
+  >];
+
+  Categories [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#7c3aed">
+      <TR><TD BGCOLOR="#7c3aed"><FONT COLOR="white"><B>CATEGORIES</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#7c3aed"><B>PK CategoryID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#7c3aed"><B>FK EventID</B></FONT> INT</TD></TR>
+      <TR><TD ALIGN="LEFT">CategoryName NVARCHAR(100)</TD></TR>
+      <TR><TD ALIGN="LEFT">GenderOption VARCHAR(20)</TD></TR>
+      <TR><TD ALIGN="LEFT">MinimumAge INT</TD></TR>
+      <TR><TD ALIGN="LEFT">MaximumAge INT NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">EntryFee DECIMAL(10,2)</TD></TR>
+      <TR><TD ALIGN="LEFT">MaxEntries INT NULL</TD></TR>
+    </TABLE>
+  >];
+
+  Enrolments [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#b45309">
+      <TR><TD BGCOLOR="#b45309"><FONT COLOR="white"><B>ENROLMENTS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#b45309"><B>PK EnrolmentID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#b45309"><B>FK EventID</B></FONT> INT</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#b45309"><B>FK ParticipantID</B></FONT> INT</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#b45309"><B>FK CategoryID</B></FONT> INT</TD></TR>
+      <TR><TD ALIGN="LEFT">EnrolmentDate DATETIME2</TD></TR>
+      <TR><TD ALIGN="LEFT">EmergencyContactName NVARCHAR(100)</TD></TR>
+      <TR><TD ALIGN="LEFT">EmergencyContactPhone NVARCHAR(25)</TD></TR>
+      <TR><TD ALIGN="LEFT">EnrolmentStatus VARCHAR(20)</TD></TR>
+      <TR><TD ALIGN="LEFT">BibNumber INT NULL</TD></TR>
+    </TABLE>
+  >];
+
+  Results [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#be123c">
+      <TR><TD BGCOLOR="#be123c"><FONT COLOR="white"><B>RESULTS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#be123c"><B>PK ResultID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#be123c"><B>FK EnrolmentID</B></FONT> INT UNIQUE</TD></TR>
+      <TR><TD ALIGN="LEFT">FinishPosition INT NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">FinishTime TIME(0) NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">PaceMinPerKm DECIMAL(5,2) NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">ResultStatus VARCHAR(20)</TD></TR>
+      <TR><TD ALIGN="LEFT">RecordedAt DATETIME2</TD></TR>
+      <TR><TD ALIGN="LEFT">Notes NVARCHAR(500) NULL</TD></TR>
+    </TABLE>
+  >];
+
+  Routes [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#0369a1">
+      <TR><TD BGCOLOR="#0369a1"><FONT COLOR="white"><B>ROUTES</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#0369a1"><B>PK RouteID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#0369a1"><B>FK EventID</B></FONT> INT UNIQUE</TD></TR>
+      <TR><TD ALIGN="LEFT">RouteName NVARCHAR(150)</TD></TR>
+      <TR><TD ALIGN="LEFT">DistanceKm DECIMAL(6,2)</TD></TR>
+      <TR><TD ALIGN="LEFT">RouteDescription NVARCHAR(1000)</TD></TR>
+      <TR><TD ALIGN="LEFT">MapUrl NVARCHAR(500) NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">ElevationGainMeters INT NULL</TD></TR>
+    </TABLE>
+  >];
+
+  EventWeather [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#0891b2">
+      <TR><TD BGCOLOR="#0891b2"><FONT COLOR="white"><B>EVENT_WEATHER</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#0891b2"><B>PK WeatherID</B></FONT> INT IDENTITY</TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT COLOR="#0891b2"><B>FK EventID</B></FONT> INT</TD></TR>
+      <TR><TD ALIGN="LEFT">ForecastDate DATE</TD></TR>
+      <TR><TD ALIGN="LEFT">TemperatureC DECIMAL(4,1)</TD></TR>
+      <TR><TD ALIGN="LEFT">Condition NVARCHAR(80)</TD></TR>
+      <TR><TD ALIGN="LEFT">WindSpeedKph DECIMAL(5,1)</TD></TR>
+      <TR><TD ALIGN="LEFT">RainProbabilityPercent INT</TD></TR>
+      <TR><TD ALIGN="LEFT">Advisory NVARCHAR(500) NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">RecordedAt DATETIME2</TD></TR>
+    </TABLE>
+  >];
+
+  Users -> Events [label="  Organiser creates\n  1 : many", arrowhead="crow", arrowtail="tee"];
+  Users -> Enrolments [label="  Participant makes\n  1 : many", arrowhead="crow", arrowtail="tee"];
+  Events -> Categories [label="  contains\n  1 : many", arrowhead="crow", arrowtail="tee"];
+  Events -> Enrolments [label="  receives\n  1 : many", arrowhead="crow", arrowtail="tee"];
+  Categories -> Enrolments [label="  selected for\n  1 : many", arrowhead="crow", arrowtail="tee"];
+  Enrolments -> Results [label="  produces\n  1 : 0..1", arrowhead="tee", arrowtail="tee"];
+  Events -> Routes [label="  has route\n  1 : 0..1", arrowhead="tee", arrowtail="tee"];
+  Events -> EventWeather [label="  has forecasts\n  1 : many", arrowhead="crow", arrowtail="tee"];
+}
