@@ -165,7 +165,8 @@ The supplied screenshot is the successful **Part 1** documentation workflow:
 
 ![Successful Part 1 GitHub Actions build](docs/ci-green-build.png)
 
-> The Part 2 workflow has passed;(doc/IMG_5128.png)
+> The Part 2 workflow has passed;![Workflow Success](docs/IMG_5128.png)
+
 
 ### Video Presentation
 The presentations should show the running API and explain the code and design decisions. The Part 2 guide expects a voiceover walkthrough of the repository, data model, authentication, role restrictions, Swagger, tests, and green CI build.
