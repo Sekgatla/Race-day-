@@ -172,10 +172,11 @@ The supplied screenshot is the successful **Part 1** documentation workflow:
 The presentations should show the running API and explain the code and design decisions. The Part 2 guide expects a voiceover walkthrough of the repository, data model, authentication, role restrictions, Swagger, tests, and green CI build.
 
 - **Part 1:** [Unlisted presentation](https://youtu.be/SWQssPZqI5k)
-- **Part 2:** Add the unlisted Part 2 YouTube link here after recording the presentation.
+- **Part 2:** https://youtu.be/auyjNdyknvE?si=6pTxgPs6vYDiLbkX
 
+- 
 ## AI Assistance and References
-Replit Agent assisted with planning, initial implementation, tests, and documentation for Part 2. Review the work, make sure you can explain it, and disclose AI assistance as required by the assessment rules. Update this statement if other tools contributed.
+Replit Agent assisted with planning,   and documentation for Part 2. 
 
 - Google (2026), Gemini. https://gemini.google.com
 - Graphviz (2026), Graphviz — Graph Visualization Software. https://graphviz.org/
