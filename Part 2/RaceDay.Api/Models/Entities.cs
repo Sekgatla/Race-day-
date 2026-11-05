@@ -9,6 +9,7 @@ public sealed class User
     public string PasswordHash { get; set; } = "";
     public string Role { get; set; } = "";
     public string? PhoneNumber { get; set; }
+    public string? ProfileImageKey { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool IsActive { get; set; } = true;
     public ICollection<RaceDayEvent> OrganisedEvents { get; set; } = new List<RaceDayEvent>();
@@ -28,6 +29,7 @@ public sealed class RaceDayEvent
     public string EventType { get; set; } = "";
     public decimal DistanceKm { get; set; }
     public int MaxParticipants { get; set; }
+    public string? BannerImageKey { get; set; }
     public string Status { get; set; } = "Scheduled";
     public DateTime CreatedAt { get; set; }
     public User Organiser { get; set; } = null!;

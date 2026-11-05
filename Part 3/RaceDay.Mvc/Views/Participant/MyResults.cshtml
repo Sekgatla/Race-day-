@@ -1,0 +1,49 @@
+@model IReadOnlyList<ResultDto>
+@{
+    ViewData["Title"] = "My results";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">EVERY FINISH TELLS A STORY</p><h1>My results</h1></div>
+    <span class="event-count">@Model.Count.ToString("00") <span>results</span></span>
+</div>
+@if (Model.Count == 0)
+{
+    <div class="empty-panel mb-5">
+        <h2 class="h3 text-uppercase">Your results will show here</h2>
+        <p class="text-secondary">After an event, the organiser will publish your finish time and position.</p>
+        <a asp-controller="Participant" asp-action="MyEnrolments" class="btn btn-outline-dark">View my entries</a>
+    </div>
+}
+else
+{
+    <div class="organiser-table-wrap table-responsive mb-5">
+        <table class="table table-hover align-middle">
+            <thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Finish time</th><th>Position</th><th>Status</th></tr></thead>
+            <tbody>
+            @foreach (var result in Model.OrderByDescending(x => x.EventDate))
+            {
+                <tr>
+                    <td><strong>@result.EventName</strong></td>
+                    <td>@result.EventDate.ToString("dd MMM yyyy")</td>
+                    <td>@result.CategoryName</td>
+                    <td>@(result.FinishTime?.ToString("HH:mm:ss") ?? "—")</td>
+                    <td>
+                        @if (result.FinishPosition is int position)
+                        {
+                            var suffix = position % 100 is 11 or 12 or 13
+                                ? "th"
+                                : (position % 10) switch { 1 => "st", 2 => "nd", 3 => "rd", _ => "th" };
+                            <span>@(position)@(suffix) place</span>
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </td>
+                    <td><span class="status-pill @(result.ResultStatus == "Finished" ? "status-finished" : "status-withdrawn")">@result.ResultStatus</span></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

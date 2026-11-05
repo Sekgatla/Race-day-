@@ -1,0 +1,59 @@
+@model IReadOnlyList<CategoryDto>
+@{
+    var item = ViewBag.Event as EventDto;
+    ViewData["Title"] = "Manage categories";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">EVENT CATEGORIES</p><h1>@item?.EventName</h1></div>
+    <a asp-action="Index" class="btn btn-outline-dark">Dashboard</a>
+</div>
+<div class="detail-columns">
+    <section class="detail-block">
+        <p class="eyebrow">AVAILABLE CATEGORIES</p>
+        <h2>Entries by category</h2>
+        @if (Model.Count == 0)
+        {
+            <p class="text-secondary">No categories yet. Create the first one using the form.</p>
+        }
+        @foreach (var category in Model)
+        {
+            <form asp-action="UpdateCategory" method="post" class="border-top py-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="eventId" value="@item?.EventId" />
+                <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4"><label class="form-label small">Category name</label><input name="CategoryName" value="@category.CategoryName" class="form-control form-control-sm" /></div>
+                    <div class="col-md-2"><label class="form-label small">Gender</label><select name="GenderOption" class="form-select form-select-sm"><option selected="@(category.GenderOption == "Open")">Open</option><option selected="@(category.GenderOption == "Female")">Female</option><option selected="@(category.GenderOption == "Male")">Male</option></select></div>
+                    <div class="col-md-2"><label class="form-label small">Min age</label><input name="MinimumAge" type="number" min="0" value="@category.MinimumAge" class="form-control form-control-sm" /></div>
+                    <div class="col-md-2"><label class="form-label small">Max age</label><input name="MaximumAge" type="number" min="0" value="@category.MaximumAge" class="form-control form-control-sm" /></div>
+                    <div class="col-md-2"><label class="form-label small">Entry fee (R)</label><input name="EntryFee" type="number" step="0.01" min="0" value="@category.EntryFee" class="form-control form-control-sm" /></div>
+                    <div class="col-12 d-flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-sm btn-dark">Save category</button>
+                    </div>
+                </div>
+            </form>
+            <form asp-action="DeleteCategory" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="eventId" value="@item?.EventId" />
+                <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                <button type="submit" class="btn btn-sm btn-outline-danger mb-3">Remove @category.CategoryName</button>
+            </form>
+        }
+    </section>
+    <aside class="detail-block">
+        <p class="eyebrow">ADD AN OPTION</p>
+        <h2>New category</h2>
+        <form asp-action="CreateCategory" asp-route-eventId="@item?.EventId" method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-3"><label class="form-label">Category name</label><input name="CategoryName" class="form-control" required minlength="2" placeholder="Open 10 km" /></div>
+            <div class="mb-3"><label class="form-label">Gender category</label><select name="GenderOption" class="form-select"><option>Open</option><option>Female</option><option>Male</option></select></div>
+            <div class="row g-2">
+                <div class="col-6"><label class="form-label">Minimum age</label><input name="MinimumAge" type="number" min="0" value="16" class="form-control" /></div>
+                <div class="col-6"><label class="form-label">Maximum age</label><input name="MaximumAge" type="number" min="0" class="form-control" /></div>
+                <div class="col-6"><label class="form-label">Entry fee (R)</label><input name="EntryFee" type="number" min="0" step="0.01" value="0" class="form-control" /></div>
+                <div class="col-6"><label class="form-label">Entry limit</label><input name="MaxEntries" type="number" min="1" class="form-control" placeholder="No limit" /></div>
+            </div>
+            <button type="submit" class="btn btn-lime mt-3">Add category</button>
+        </form>
+    </aside>
+</div>

@@ -1,0 +1,31 @@
+@model EventEnrolmentsViewModel
+@{
+    ViewData["Title"] = "Event enrolments";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">PARTICIPANT LIST · @Model.Event.EventDate.ToString("dd MMM yyyy")</p><h1>@Model.Event.EventName</h1></div>
+    <a asp-action="Results" asp-route-id="@Model.Event.EventId" class="btn btn-lime">Capture results</a>
+</div>
+<div class="organiser-table-wrap table-responsive mb-5">
+    <table class="table table-hover align-middle">
+        <thead><tr><th>Participant</th><th>Email</th><th>Category</th><th>Entry date</th><th>Bib</th><th>Status</th></tr></thead>
+        <tbody>
+        @if (Model.Enrolments.Count == 0)
+        {
+            <tr><td colspan="6" class="text-center text-secondary py-5">No participants have entered this event yet.</td></tr>
+        }
+        @foreach (var entry in Model.Enrolments.OrderBy(x => x.ParticipantName))
+        {
+            var statusClass = entry.EnrolmentStatus == "Confirmed" ? "status-confirmed" : entry.EnrolmentStatus == "Pending" ? "status-pending" : "status-withdrawn";
+            <tr>
+                <td><strong>@entry.ParticipantName</strong><div class="small text-secondary">@entry.EmergencyContactName · @entry.EmergencyContactPhone</div></td>
+                <td>@entry.ParticipantEmail</td>
+                <td>@entry.CategoryName</td>
+                <td>@entry.EnrolmentDate.ToString("dd MMM yyyy")</td>
+                <td>@(entry.BibNumber?.ToString() ?? "—")</td>
+                <td><span class="status-pill @statusClass">@entry.EnrolmentStatus</span></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,37 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "My profile";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">YOUR RACEDAY ACCOUNT</p><h1>My profile</h1></div>
+</div>
+<div class="profile-layout">
+    <aside class="profile-card">
+        @if (!string.IsNullOrWhiteSpace(Model.ProfileImageUrl))
+        {
+            <img class="profile-photo" src="/media/profile" alt="Profile picture for @Model.FirstName @Model.LastName" />
+        }
+        else
+        {
+            <div class="profile-photo profile-placeholder" aria-hidden="true">@Model.FirstName.FirstOrDefault()@Model.LastName.FirstOrDefault()</div>
+        }
+        <h2>@Model.FirstName @Model.LastName</h2>
+        <p>@Model.Email</p>
+        <span class="status-pill status-confirmed">@Model.Role</span>
+    </aside>
+    <section class="profile-form">
+        <h2 class="h3 text-uppercase mb-4">Personal information</h2>
+        <div asp-validation-summary="ModelOnly" class="mb-3"></div>
+        <form asp-action="Profile" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-6"><label asp-for="FirstName" class="form-label">First name</label><input asp-for="FirstName" class="form-control" /><span asp-validation-for="FirstName"></span></div>
+                <div class="col-md-6"><label asp-for="LastName" class="form-label">Last name</label><input asp-for="LastName" class="form-control" /><span asp-validation-for="LastName"></span></div>
+                <div class="col-12"><label asp-for="PhoneNumber" class="form-label">Phone number</label><input asp-for="PhoneNumber" class="form-control" /><span asp-validation-for="PhoneNumber"></span></div>
+                <div class="col-12"><label asp-for="ProfileImage" class="form-label">Profile picture</label><input asp-for="ProfileImage" type="file" accept="image/png,image/jpeg,image/webp" class="form-control" /><span asp-validation-for="ProfileImage"></span><small class="text-secondary">PNG, JPEG, or WebP · up to 5 MB</small></div>
+            </div>
+            <button type="submit" class="btn btn-lime mt-4">Save profile</button>
+        </form>
+    </section>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,40 @@
+@model EventResultsViewModel
+@{
+    ViewData["Title"] = "Capture results";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">OFFICIAL RESULTS · @Model.Event.EventDate.ToString("dd MMM yyyy")</p><h1>@Model.Event.EventName</h1></div>
+    <a asp-action="Enrolments" asp-route-id="@Model.Event.EventId" class="btn btn-outline-dark">View entries</a>
+</div>
+<p class="text-secondary mb-3">Enter a finishing position and time for finishers. Use DNF or DNS when a participant did not finish.</p>
+<div class="organiser-table-wrap table-responsive mb-5">
+    <table class="table align-middle">
+        <thead><tr><th>Participant</th><th>Category</th><th>Position</th><th>Finish time</th><th>Result status</th><th>Notes</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var entry in Model.Enrolments.OrderBy(x => x.ParticipantName))
+        {
+            var saved = Model.Results.GetValueOrDefault(entry.EnrolmentId);
+            <tr>
+                <td><strong>@entry.ParticipantName</strong><div class="small text-secondary">Bib @(entry.BibNumber?.ToString() ?? "—")</div></td>
+                <td>@entry.CategoryName</td>
+                <td colspan="5">
+                    <form asp-action="SaveResult" method="post" class="d-flex flex-wrap align-items-end gap-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="EventId" value="@Model.Event.EventId" />
+                        <input type="hidden" name="EnrolmentId" value="@entry.EnrolmentId" />
+                        <div><label class="form-label small">Position</label><input name="FinishPosition" type="number" min="1" class="form-control form-control-sm result-control" value="@saved?.FinishPosition" /></div>
+                        <div><label class="form-label small">Time</label><input name="FinishTime" type="time" step="1" class="form-control form-control-sm result-control" value="@saved?.FinishTime?.ToString("HH:mm:ss")" /></div>
+                        <div><label class="form-label small">Status</label><select name="ResultStatus" class="form-select form-select-sm result-control"><option selected="@(saved?.ResultStatus is null or "Finished")">Finished</option><option selected="@(saved?.ResultStatus == "DNF")">DNF</option><option selected="@(saved?.ResultStatus == "DNS")">DNS</option></select></div>
+                        <div class="flex-grow-1"><label class="form-label small">Notes</label><input name="Notes" class="form-control form-control-sm" value="@saved?.Notes" maxlength="500" /></div>
+                        <button type="submit" class="btn btn-sm btn-dark">@(saved is null ? "Publish" : "Update")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        @if (Model.Enrolments.Count == 0)
+        {
+            <tr><td colspan="7" class="text-center text-secondary py-5">No entries are available for results.</td></tr>
+        }
+        </tbody>
+    </table>
+</div>

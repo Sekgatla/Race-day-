@@ -58,7 +58,8 @@ public sealed class EventsController(RaceDayDbContext db) : ControllerBase
                 e.EventId, e.OrganiserId, e.Organiser.FirstName + " " + e.Organiser.LastName,
                 e.EventName, e.Description, e.EventDate, e.StartTime, e.Location, e.Province,
                 e.EventType, e.DistanceKm, e.MaxParticipants, e.Status,
-                e.Categories.Count(), e.Enrolments.Count()))
+                e.Categories.Count(), e.Enrolments.Count(),
+                e.BannerImageKey == null ? null : "/api/events/" + e.EventId + "/banner"))
             .ToListAsync(cancellationToken);
         return Ok(events);
     }
@@ -222,5 +223,6 @@ public sealed class EventsController(RaceDayDbContext db) : ControllerBase
             e.EventId, e.OrganiserId, e.Organiser.FirstName + " " + e.Organiser.LastName,
             e.EventName, e.Description, e.EventDate, e.StartTime, e.Location, e.Province,
             e.EventType, e.DistanceKm, e.MaxParticipants, e.Status,
-            e.Categories.Count(), e.Enrolments.Count()));
+            e.Categories.Count(), e.Enrolments.Count(),
+            e.BannerImageKey == null ? null : "/api/events/" + e.EventId + "/banner"));
 }

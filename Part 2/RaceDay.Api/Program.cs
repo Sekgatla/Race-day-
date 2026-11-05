@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using RaceDay.Api.Data;
 using RaceDay.Api.Models;
 using RaceDay.Api.Security;
+using RaceDay.Api.Storage;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,39 @@ builder.Services.AddDbContext<RaceDayDbContext>(options =>
         throw new InvalidOperationException($"Unsupported RaceDay database provider '{databaseProvider}'.");
     }
 });
+
+var mediaProvider = builder.Configuration["RACEDAY_MEDIA_PROVIDER"]
+                    ?? builder.Configuration["RaceDay:Media:Provider"]
+                    ?? (builder.Environment.IsProduction() ? "Azure" : "Local");
+if (mediaProvider.Equals("Azure", StringComparison.OrdinalIgnoreCase))
+{
+    var connectionString = builder.Configuration["AZURE_STORAGE_CONNECTION_STRING"]
+                           ?? builder.Configuration["AzureStorage:ConnectionString"];
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        throw new InvalidOperationException(
+            "Azure Blob Storage is selected. Set AZURE_STORAGE_CONNECTION_STRING as a secret before starting the API.");
+    }
+
+    var containerName = builder.Configuration["AZURE_STORAGE_CONTAINER"]
+                        ?? builder.Configuration["AzureStorage:Container"]
+                        ?? "raceday-media";
+    builder.Services.AddSingleton<IImageStorage>(
+        _ => new AzureBlobImageStorage(connectionString, containerName));
+}
+else if (mediaProvider.Equals("Local", StringComparison.OrdinalIgnoreCase))
+{
+    var localPath = builder.Configuration["RaceDay:Media:LocalPath"] ?? "App_Data/media";
+    var absolutePath = Path.IsPathRooted(localPath)
+        ? localPath
+        : Path.Combine(builder.Environment.ContentRootPath, localPath);
+    builder.Services.AddSingleton<IImageStorage>(_ => new LocalImageStorage(absolutePath));
+}
+else
+{
+    throw new InvalidOperationException(
+        $"Unsupported RaceDay media provider '{mediaProvider}'. Use 'Azure' or 'Local'.");
+}
 
 builder.Services.AddSingleton<ISessionStore, InMemorySessionStore>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

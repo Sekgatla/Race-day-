@@ -1,0 +1,49 @@
+name: Part 3 MVC, API, and Docker
+
+on:
+  push:
+    branches: [main, part-3]
+    paths:
+      - "Part 2/**"
+      - "Part 3/**"
+      - "artifacts/raceday/.replit-artifact/artifact.toml"
+      - ".github/workflows/part3-ci.yml"
+      - "docker-compose.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "Part 2/**"
+      - "Part 3/**"
+      - "artifacts/raceday/.replit-artifact/artifact.toml"
+      - ".github/workflows/part3-ci.yml"
+      - "docker-compose.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-and-containerize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore solution
+        run: dotnet restore "Part 2/RaceDay.sln"
+
+      - name: Build API and MVC application
+        run: dotnet build "Part 2/RaceDay.sln" --configuration Release --no-restore
+
+      - name: Run API integration tests
+        run: dotnet test "Part 2/RaceDay.sln" --configuration Release --no-build --logger "console;verbosity=normal"
+
+      - name: Build API container
+        run: docker build -f "Part 2/RaceDay.Api/Dockerfile" -t raceday-api:ci .
+
+      - name: Build MVC container
+        run: docker build -f "Part 3/RaceDay.Mvc/Dockerfile" -t raceday-mvc:ci .

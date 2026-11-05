@@ -1,0 +1,40 @@
+@model EnrolmentFormViewModel
+@{
+    var item = ViewBag.Event as EventDto;
+    var categories = ViewBag.Categories as IReadOnlyList<CategoryDto> ?? [];
+    ViewData["Title"] = "Enter event";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">CLAIM YOUR START LINE</p><h1>Enter event</h1></div>
+    @if (item is not null) { <a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId" class="btn btn-outline-dark">Event details</a> }
+</div>
+<section class="auth-form content-panel mx-auto mb-5" style="max-width:700px;">
+    @if (item is not null) { <h2>@item.EventName</h2><p>@item.EventDate.ToString("dddd, dd MMMM yyyy") · @item.Location</p> }
+    <div asp-validation-summary="ModelOnly" class="mb-3"></div>
+    <form asp-action="Enrol" asp-route-id="@item?.EventId" method="post">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Choose your category</label>
+            <select asp-for="CategoryId" class="form-select">
+                <option value="">Select a category</option>
+                @foreach (var category in categories)
+                {
+                    <option value="@category.CategoryId">@category.CategoryName · @category.GenderOption · R @category.EntryFee.ToString("0.00")</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryId"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="EmergencyContactName" class="form-label">Emergency contact name</label>
+            <input asp-for="EmergencyContactName" class="form-control" autocomplete="off" />
+            <span asp-validation-for="EmergencyContactName"></span>
+        </div>
+        <div class="mb-4">
+            <label asp-for="EmergencyContactPhone" class="form-label">Emergency contact phone</label>
+            <input asp-for="EmergencyContactPhone" class="form-control" autocomplete="off" />
+            <span asp-validation-for="EmergencyContactPhone"></span>
+        </div>
+        <button type="submit" class="btn btn-lime">Confirm entry</button>
+    </form>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -30,6 +30,7 @@ public sealed class RaceDayDbContext(DbContextOptions<RaceDayDbContext> options)
             entity.Property(user => user.PasswordHash).HasMaxLength(255).IsRequired();
             entity.Property(user => user.Role).HasColumnType("varchar(20)").HasMaxLength(20).IsRequired();
             entity.Property(user => user.PhoneNumber).HasMaxLength(25);
+            entity.Property(user => user.ProfileImageKey).HasMaxLength(500);
             entity.Property(user => user.CreatedAt).HasColumnType("datetime2(0)").HasDefaultValueSql("SYSUTCDATETIME()");
             entity.Property(user => user.IsActive).HasDefaultValue(true);
         });
@@ -55,6 +56,7 @@ public sealed class RaceDayDbContext(DbContextOptions<RaceDayDbContext> options)
             entity.Property(e => e.EventType).HasColumnType("varchar(20)").HasMaxLength(20).IsRequired();
             entity.Property(e => e.DistanceKm).HasPrecision(6, 2);
             entity.Property(e => e.MaxParticipants).HasDefaultValue(1000);
+            entity.Property(e => e.BannerImageKey).HasMaxLength(500);
             entity.Property(e => e.Status).HasColumnType("varchar(20)").HasMaxLength(20).HasDefaultValue("Scheduled");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime2(0)").HasDefaultValueSql("SYSUTCDATETIME()");
             entity.HasOne(e => e.Organiser).WithMany(user => user.OrganisedEvents)

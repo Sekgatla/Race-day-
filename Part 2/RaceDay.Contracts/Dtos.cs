@@ -45,7 +45,8 @@ public sealed record UserProfileDto(
     string Email,
     string Role,
     string? PhoneNumber,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    string? ProfileImageUrl = null);
 
 public sealed record AuthResponse(string Token, DateTimeOffset ExpiresAt, UserProfileDto User);
 
@@ -109,7 +110,8 @@ public sealed record EventDto(
     int MaxParticipants,
     string Status,
     int CategoryCount,
-    int EnrolmentCount);
+    int EnrolmentCount,
+    string? BannerImageUrl = null);
 
 public sealed class CreateCategoryRequest
 {

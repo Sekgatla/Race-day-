@@ -1,0 +1,36 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+<section class="auth-shell">
+    <aside class="auth-aside">
+        <div>
+            <p class="eyebrow">THE ROAD IS YOURS</p>
+            <h1>Every start<br />has a <em>story.</em></h1>
+            <p>Pick up where you left off. Your event entries and race history are ready when you are.</p>
+        </div>
+        <span class="auth-aside-foot">RACEDAY · SOUTH AFRICA</span>
+    </aside>
+    <div class="auth-form">
+        <h2>Welcome back</h2>
+        <p>Sign in to your RaceDay account.</p>
+        <div asp-validation-summary="ModelOnly" class="mb-3"></div>
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="ReturnUrl" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email address</label>
+                <input asp-for="Email" class="form-control" autocomplete="email" placeholder="you@example.com" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <button class="btn btn-lime w-100" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="auth-foot">New to RaceDay? <a asp-action="Register">Create an account</a></p>
+    </div>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

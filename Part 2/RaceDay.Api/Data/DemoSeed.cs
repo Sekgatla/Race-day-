@@ -22,18 +22,25 @@ public static class DemoSeed
         var participantTwo = NewUser("Pieter", "van Wyk", "pieter.vanwyk@raceday.example", "Participant", "+27 71 555 0104", hasher);
         db.Users.AddRange(organiserOne, organiserTwo, participantOne, participantTwo);
 
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var capeCycleDate = today.AddDays(-24);
+        var sowetoDate = today.AddDays(-3);
+        var coastlineDate = today.AddDays(14);
+
         var capeCycle = NewEvent(organiserOne, "Cape Town Cycle Challenge",
             "A fully supported coastal cycle event from the city to the Cape Peninsula and back.",
-            new DateOnly(2026, 10, 11), new TimeOnly(6, 0), "Grand Parade, Cape Town", "Western Cape",
+            capeCycleDate, new TimeOnly(6, 0), "Grand Parade, Cape Town", "Western Cape",
             "Cycling", 109.40m, 12000);
         var soweto = NewEvent(organiserOne, "Soweto Community Marathon",
             "A city marathon celebrating Soweto landmarks, community spirit, and healthy living.",
-            new DateOnly(2026, 11, 1), new TimeOnly(6, 30), "Nasrec Expo Centre, Johannesburg", "Gauteng",
+            sowetoDate, new TimeOnly(6, 30), "Nasrec Expo Centre, Johannesburg", "Gauteng",
             "Running", 42.20m, 8000);
         var coastline = NewEvent(organiserTwo, "KwaZulu-Natal Coastline Walk",
             "A scenic, accessible coastal walk supporting local conservation and active lifestyles.",
-            new DateOnly(2026, 9, 27), new TimeOnly(7, 0), "Moses Mabhida Stadium, Durban", "KwaZulu-Natal",
+            coastlineDate, new TimeOnly(7, 0), "Moses Mabhida Stadium, Durban", "KwaZulu-Natal",
             "Walking", 10.00m, 2500);
+        capeCycle.Status = "Completed";
+        soweto.Status = "Completed";
         db.Events.AddRange(capeCycle, soweto, coastline);
         await db.SaveChangesAsync(cancellationToken);
 
@@ -60,17 +67,17 @@ public static class DemoSeed
                 "https://maps.example/raceday/kzn-coastline-walk", 55));
 
         db.EventWeather.AddRange(
-            NewWeather(capeCycle, new DateOnly(2026, 10, 10), 17.5m, "Partly cloudy", 18m, 20,
+            NewWeather(capeCycle, capeCycleDate.AddDays(-1), 17.5m, "Partly cloudy", 18m, 20,
                 "Expect a cool start; cyclists should carry a light wind layer."),
-            NewWeather(capeCycle, new DateOnly(2026, 10, 11), 19m, "Sunny intervals", 22m, 15,
+            NewWeather(capeCycle, capeCycleDate, 19m, "Sunny intervals", 22m, 15,
                 "Strong coastal crosswinds are possible after Chapman's Peak."),
-            NewWeather(soweto, new DateOnly(2026, 10, 31), 16m, "Clear morning", 10m, 10,
+            NewWeather(soweto, sowetoDate.AddDays(-1), 16m, "Clear morning", 10m, 10,
                 "Good running conditions with a cool start."),
-            NewWeather(soweto, new DateOnly(2026, 11, 1), 21m, "Warm and clear", 12m, 5,
+            NewWeather(soweto, sowetoDate, 21m, "Warm and clear", 12m, 5,
                 "Carry water and use the marked hydration stations."),
-            NewWeather(coastline, new DateOnly(2026, 9, 26), 18m, "Light cloud", 14m, 25,
+            NewWeather(coastline, coastlineDate.AddDays(-1), 18m, "Light cloud", 14m, 25,
                 "Comfortable walking conditions; light rain remains possible."),
-            NewWeather(coastline, new DateOnly(2026, 9, 27), 22m, "Partly cloudy", 16m, 20,
+            NewWeather(coastline, coastlineDate, 22m, "Partly cloudy", 16m, 20,
                 "Use sun protection on the exposed beachfront section."));
 
         var entries = new[]

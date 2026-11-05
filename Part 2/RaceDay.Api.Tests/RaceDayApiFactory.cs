@@ -7,6 +7,7 @@ namespace RaceDay.Api.Tests;
 public sealed class RaceDayApiFactory : WebApplicationFactory<Program>
 {
     private readonly string _databaseName = $"RaceDayTests_{Guid.NewGuid():N}";
+    private readonly string _mediaPath = Path.Combine(Path.GetTempPath(), $"RaceDayMediaTests_{Guid.NewGuid():N}");
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -16,7 +17,9 @@ public sealed class RaceDayApiFactory : WebApplicationFactory<Program>
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["RaceDay:DatabaseProvider"] = "InMemory",
-                ["RaceDay:InMemoryDatabaseName"] = _databaseName
+                ["RaceDay:InMemoryDatabaseName"] = _databaseName,
+                ["RACEDAY_MEDIA_PROVIDER"] = "Local",
+                ["RaceDay:Media:LocalPath"] = _mediaPath
             });
         });
     }

@@ -1,0 +1,104 @@
+@model EventDetailsViewModel
+@{
+    ViewData["Title"] = Model.Event.EventName;
+    var role = Context.Session.GetString(SessionKeys.Role);
+    var eventItem = Model.Event;
+}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">EVENT DETAILS · @eventItem.EventType.ToUpperInvariant()</p>
+        <a asp-controller="Home" asp-action="Index" class="text-decoration-none small">← Back to events</a>
+    </div>
+    @if (role == RaceDayRoles.Organiser && Context.Session.GetString(SessionKeys.UserId) == eventItem.OrganiserId.ToString())
+    {
+        <a asp-controller="Organiser" asp-action="Edit" asp-route-id="@eventItem.EventId" class="btn btn-dark">Manage event</a>
+    }
+</div>
+<section class="event-detail-hero">
+    @if (!string.IsNullOrWhiteSpace(eventItem.BannerImageUrl))
+    {
+        <img src="/media/events/@eventItem.EventId" alt="" />
+    }
+    <div class="event-detail-copy">
+        <p class="eyebrow text-white">@eventItem.EventDate.ToString("dddd, dd MMMM yyyy") · @eventItem.StartTime.ToString("HH:mm")</p>
+        <h1>@eventItem.EventName</h1>
+        <p>@eventItem.Location, @eventItem.Province</p>
+    </div>
+</section>
+<div class="event-metrics">
+    <div class="metric"><span>Distance</span><strong>@eventItem.DistanceKm.ToString("0.##") km</strong></div>
+    <div class="metric"><span>Sport</span><strong>@eventItem.EventType</strong></div>
+    <div class="metric"><span>Entries</span><strong>@eventItem.EnrolmentCount / @eventItem.MaxParticipants</strong></div>
+    <div class="metric"><span>Organised by</span><strong>@eventItem.OrganiserName</strong></div>
+</div>
+<div class="detail-columns">
+    <section class="detail-block">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+                <p class="eyebrow">THE EVENT</p>
+                <h2>Race information</h2>
+            </div>
+            @if (role == RaceDayRoles.Participant && eventItem.Status == "Scheduled")
+            {
+                <a asp-controller="Participant" asp-action="Enrol" asp-route-id="@eventItem.EventId" class="btn btn-lime">Enter this event</a>
+            }
+        </div>
+        <p class="mb-4">@eventItem.Description</p>
+        <h3 class="h5 text-uppercase">Available categories</h3>
+        @if (Model.Categories.Count == 0)
+        {
+            <p class="text-secondary small">Categories have not been added yet.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead><tr><th>Category</th><th>Age</th><th>Entry</th></tr></thead>
+                    <tbody>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr>
+                            <td><strong>@category.CategoryName</strong><div class="small text-secondary">@category.GenderOption</div></td>
+                            <td>@category.MinimumAge–@(category.MaximumAge?.ToString() ?? "open")</td>
+                            <td>R @category.EntryFee.ToString("0.00")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+    <aside class="detail-block">
+        <p class="eyebrow">PLAN YOUR DAY</p>
+        <h2>Race-day notes</h2>
+        @if (Model.Route is not null)
+        {
+            <div class="mb-4">
+                <h3 class="h6 text-uppercase">@Model.Route.RouteName · @Model.Route.DistanceKm.ToString("0.##") km</h3>
+                <p class="small text-secondary mb-1">@Model.Route.RouteDescription</p>
+                @if (Model.Route.ElevationGainMeters.HasValue) { <p class="small">Elevation gain: @Model.Route.ElevationGainMeters m</p> }
+                @if (!string.IsNullOrWhiteSpace(Model.Route.MapUrl)) { <a href="@Model.Route.MapUrl" target="_blank" rel="noopener">Open route map ↗</a> }
+            </div>
+        }
+        else
+        {
+            <p class="small text-secondary">Route details will be added by the organiser.</p>
+        }
+        <hr />
+        <h3 class="h6 text-uppercase">Weather</h3>
+        @if (Model.Weather.Count > 0)
+        {
+            @foreach (var forecast in Model.Weather.OrderBy(x => x.ForecastDate))
+            {
+                <div class="d-flex justify-content-between gap-3 border-bottom py-2 small">
+                    <strong>@forecast.ForecastDate.ToString("dd MMM") · @forecast.Condition</strong>
+                    <span>@forecast.TemperatureC.ToString("0")°C · @forecast.RainProbabilityPercent% rain</span>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="small text-secondary">No forecast has been posted yet.</p>
+        }
+    </aside>
+</div>

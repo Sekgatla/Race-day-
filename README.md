@@ -175,6 +175,66 @@ The presentations should show the running API and explain the code and design de
 - **Part 2:** https://youtu.be/auyjNdyknvE?si=6pTxgPs6vYDiLbkX
 
 - 
+## Part 3: ASP.NET Core MVC Application
+
+Part 3 adds an MVC web application that consumes the Part 2 REST API. It does not access the database directly or duplicate API business rules.
+
+### User workflows
+
+| Role | Available workflows |
+|:---|:---|
+| **Organiser** | View an event dashboard, create and edit events, manage event categories, review enrolments, capture results, and upload event banners. |
+| **Participant** | Browse and filter events, view event details, enrol in a category, review enrolments and results, edit a profile, and upload a profile picture. |
+
+Both roles sign in through the API. The MVC app keeps the bearer token in server-side session storage and presents role-appropriate navigation. The API remains responsible for authentication, event ownership, validation, and persistence.
+
+### Run the application
+
+The preview script builds the solution and starts the API and MVC site together:
+
+```bash
+bash "Part 3/start-preview.sh"
+```
+
+The development preview uses the API's in-memory database and local image storage. Seeded sample accounts use the demo password shown in the API authentication section above. Data in the in-memory database resets when the API restarts.
+
+To build or test the full solution:
+
+```bash
+dotnet tool restore --tool-manifest "Part 2/.config/dotnet-tools.json"
+dotnet build "Part 2/RaceDay.sln" --configuration Release
+dotnet test "Part 2/RaceDay.sln" --configuration Release
+```
+
+### Azure Blob Storage
+
+The Part 2 API owns all image upload and retrieval routes. In production, set:
+
+- `RACEDAY_MEDIA_PROVIDER=Azure`
+- `AZURE_STORAGE_CONNECTION_STRING` as a Replit Secret or deployment secret
+- `AZURE_STORAGE_CONTAINER` optionally; the default container is `raceday-media`
+- `RACEDAY_SQLSERVER_CONNECTION` as a production secret for the API's SQL Server connection
+
+The API rejects uploads over 5 MB and accepts PNG, JPEG, and WebP images after checking their file signatures. Images are private in the storage account and are streamed through authenticated or public API routes as appropriate. The MVC app never receives the Azure connection string.
+
+Development and Docker Compose explicitly use local file storage so the app can run without cloud credentials. The `docker compose up --build` demo uses an in-memory database and is not a durable production deployment. Replit production startup requires both the SQL Server and Azure secrets; it stops with a clear error if either is missing.
+
+### Docker
+
+Run the API and MVC containers together from the repository root:
+
+```bash
+docker compose up --build
+```
+
+Open `http://localhost:8080`. Separate multi-stage Dockerfiles are provided for the API and MVC application. To use production SQL Server and Azure Blob Storage, configure the provider and connection-string environment variables rather than the in-memory/local demo settings.
+
+### Part 3 CI
+
+The `part3-ci.yml` workflow restores and builds the combined solution, runs the API integration tests, and builds both Docker images. The source remains in the clearly named `Part 3/` folder.
+
+The assessment also calls for at least 20 meaningful GitHub commits. The supplied archives contain source snapshots but not their original commit history; make genuine commits as the work progresses rather than generating filler history.
+
 ## AI Assistance and References
 Replit Agent assisted with planning,   and documentation for Part 2. 
 

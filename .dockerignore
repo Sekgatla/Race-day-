@@ -1,0 +1,9 @@
+.git
+.local
+.cache
+.conversation
+node_modules
+**/bin/
+**/obj/
+**/App_Data/
+**/wwwroot/lib/*.map

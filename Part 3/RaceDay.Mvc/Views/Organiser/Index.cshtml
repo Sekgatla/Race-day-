@@ -1,0 +1,59 @@
+@model OrganiserDashboardViewModel
+@{
+    ViewData["Title"] = "Organiser dashboard";
+    var eventCount = Model.Events.Count;
+    var enrolmentCount = Model.Events.Sum(item => item.EnrolmentCount);
+    var upcomingCount = Model.Events.Count(item => item.Status == "Scheduled" && item.EventDate >= DateOnly.FromDateTime(DateTime.Today));
+}
+<div class="page-heading">
+    <div><p class="eyebrow">RACEDAY · ORGANISER</p><h1>Your events</h1></div>
+    <a asp-action="Create" class="btn btn-lime">Create event <span aria-hidden="true">＋</span></a>
+</div>
+<section class="dashboard-grid">
+    <div class="summary-tile"><strong>@eventCount.ToString("00")</strong><span>Events created</span></div>
+    <div class="summary-tile"><strong>@enrolmentCount.ToString("N0")</strong><span>Total participant entries</span></div>
+    <div class="summary-tile"><strong>@upcomingCount.ToString("00")</strong><span>Upcoming events</span></div>
+</section>
+@if (Model.Events.Count == 0)
+{
+    <div class="empty-panel mb-5">
+        <h2 class="h3 text-uppercase">Your first event starts here</h2>
+        <p class="text-secondary">Create an event, add categories, and open the entries.</p>
+        <a asp-action="Create" class="btn btn-dark">Create an event</a>
+    </div>
+}
+else
+{
+    <div class="organiser-table-wrap table-responsive mb-5">
+        <table class="table table-hover align-middle">
+            <thead><tr><th>Event</th><th>Date</th><th>Entries</th><th>Status</th><th>Manage</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.Events.OrderBy(x => x.EventDate))
+            {
+                var statusClass = item.Status == "Scheduled" ? "status-confirmed" : item.Status == "Completed" ? "status-pending" : "status-withdrawn";
+                <tr>
+                    <td>
+                        <strong>@item.EventName</strong>
+                        <div class="small text-secondary">@item.EventType · @item.DistanceKm.ToString("0.##") km · @item.Location</div>
+                    </td>
+                    <td>@item.EventDate.ToString("dd MMM yyyy")</td>
+                    <td>@item.EnrolmentCount / @item.MaxParticipants</td>
+                    <td><span class="status-pill @statusClass">@item.Status</span></td>
+                    <td>
+                        <div class="quick-actions">
+                            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-outline-dark">Edit</a>
+                            <a asp-action="Categories" asp-route-id="@item.EventId" class="btn btn-outline-dark">Categories</a>
+                            <a asp-action="Enrolments" asp-route-id="@item.EventId" class="btn btn-outline-dark">Entries</a>
+                            <a asp-action="Results" asp-route-id="@item.EventId" class="btn btn-outline-dark">Results</a>
+                            <form asp-action="Delete" asp-route-id="@item.EventId" method="post" onsubmit="return confirm('Remove or cancel this event?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

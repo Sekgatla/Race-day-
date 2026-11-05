@@ -1,0 +1,91 @@
+@model EventFormViewModel
+@{
+    var isEdit = Model.EventId.HasValue;
+    ViewData["Title"] = isEdit ? "Edit event" : "Create event";
+}
+<div class="page-heading">
+    <div><p class="eyebrow">ORGANISER WORKSPACE</p><h1>@(isEdit ? "Edit event" : "Create event")</h1></div>
+    <a asp-action="Index" class="btn btn-outline-dark">Back to dashboard</a>
+</div>
+<section class="profile-form mb-5">
+    <div asp-validation-summary="ModelOnly" class="mb-3"></div>
+    <form asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@Model.EventId" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input asp-for="EventId" type="hidden" />
+        <div class="row g-3">
+            <div class="col-lg-8">
+                <label asp-for="EventName" class="form-label">Event name</label>
+                <input asp-for="EventName" class="form-control" placeholder="e.g. Joburg City Run" />
+                <span asp-validation-for="EventName"></span>
+            </div>
+            <div class="col-lg-4">
+                <label asp-for="EventType" class="form-label">Event type</label>
+                <select asp-for="EventType" class="form-select">
+                    <option value="Running">Running</option><option value="Walking">Walking</option><option value="Cycling">Cycling</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="EventDate" class="form-label">Event date</label>
+                <input asp-for="EventDate" type="date" class="form-control" />
+                <span asp-validation-for="EventDate"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="StartTime" class="form-label">Start time</label>
+                <input asp-for="StartTime" type="time" class="form-control" />
+                <span asp-validation-for="StartTime"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="DistanceKm" class="form-label">Distance (km)</label>
+                <input asp-for="DistanceKm" type="number" min="0.01" step="0.01" class="form-control" />
+                <span asp-validation-for="DistanceKm"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Location" class="form-label">Location / town</label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Province" class="form-label">Province</label>
+                <select asp-for="Province" class="form-select">
+                    @foreach (var province in new[] { "Eastern Cape", "Free State", "Gauteng", "KwaZulu-Natal", "Limpopo", "Mpumalanga", "North West", "Northern Cape", "Western Cape" })
+                    {
+                        <option value="@province">@province</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="MaxParticipants" class="form-label">Maximum participants</label>
+                <input asp-for="MaxParticipants" type="number" min="1" class="form-control" />
+                <span asp-validation-for="MaxParticipants"></span>
+            </div>
+            @if (isEdit)
+            {
+                <div class="col-md-6">
+                    <label asp-for="Status" class="form-label">Event status</label>
+                    <select asp-for="Status" class="form-select">
+                        <option>Scheduled</option><option>Completed</option><option>Cancelled</option>
+                    </select>
+                </div>
+            }
+            <div class="col-12">
+                <label asp-for="BannerImage" class="form-label"></label>
+                <input asp-for="BannerImage" type="file" accept="image/png,image/jpeg,image/webp" class="form-control" />
+                <span asp-validation-for="BannerImage"></span>
+                @if (isEdit)
+                {
+                    <small class="text-secondary">Leave this empty to keep the current banner. Images are uploaded through the API.</small>
+                }
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-lime">@(isEdit ? "Save event" : "Create event")</button>
+            <a asp-action="Index" class="btn btn-outline-dark">Cancel</a>
+        </div>
+    </form>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

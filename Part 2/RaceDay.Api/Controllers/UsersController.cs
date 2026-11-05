@@ -49,5 +49,12 @@ public sealed class UsersController(RaceDayDbContext db) : ControllerBase
     private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
     private static UserProfileDto MapProfile(RaceDay.Api.Models.User user) => new(
-        user.UserId, user.FirstName, user.LastName, user.Email, user.Role, user.PhoneNumber, user.CreatedAt);
+        user.UserId,
+        user.FirstName,
+        user.LastName,
+        user.Email,
+        user.Role,
+        user.PhoneNumber,
+        user.CreatedAt,
+        user.ProfileImageKey is null ? null : "/api/users/me/profile-image");
 }

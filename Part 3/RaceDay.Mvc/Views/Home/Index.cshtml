@@ -1,0 +1,108 @@
+@model EventListViewModel
+@{
+    ViewData["Title"] = "Find your next finish";
+}
+<section class="hero-band">
+    <div class="hero-copy">
+        <p class="eyebrow"><span></span> SOUTH AFRICA, ON THE MOVE</p>
+        <h1>Make your next<br /><em>finish count.</em></h1>
+        <p class="hero-intro">The road is calling. Find a run, walk, or ride worth showing up for.</p>
+        <a class="btn btn-lime btn-lg" href="#event-list">Explore upcoming events <span aria-hidden="true">↘</span></a>
+    </div>
+    <div class="hero-stamp" aria-hidden="true">
+        <div class="stamp-ring"><span>YOUR<br />NEXT<br /><b>START</b></span></div>
+        <span class="stamp-caption">RACE DAY IS<br />YOUR DAY</span>
+    </div>
+    <div class="hero-coordinate" aria-hidden="true">25°44' S &nbsp; 28°11' E</div>
+</section>
+
+<section class="events-section" id="event-list">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">THE START LINE IS HERE</p>
+            <h2>Upcoming events</h2>
+        </div>
+        <span class="event-count">@Model.Events.Count.ToString("00") <span>listed</span></span>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <div class="alert alert-warning" role="alert">
+            @Model.Error
+            <span class="d-block small mt-1">The event list will appear when the RaceDay API is available.</span>
+        </div>
+    }
+
+    <form method="get" class="filter-panel" aria-label="Filter events">
+        <div class="filter-field filter-search">
+            <label asp-for="Filter.Search">Search events</label>
+            <input asp-for="Filter.Search" class="form-control" placeholder="Event, town, province" />
+        </div>
+        <div class="filter-field">
+            <label asp-for="Filter.EventType">Sport</label>
+            <select asp-for="Filter.EventType" class="form-select">
+                <option value="">All sports</option>
+                <option value="Running">Running</option>
+                <option value="Walking">Walking</option>
+                <option value="Cycling">Cycling</option>
+            </select>
+        </div>
+        <div class="filter-field">
+            <label asp-for="Filter.Province">Province</label>
+            <select asp-for="Filter.Province" class="form-select">
+                <option value="">All provinces</option>
+                @foreach (var province in new[] { "Eastern Cape", "Free State", "Gauteng", "KwaZulu-Natal", "Limpopo", "Mpumalanga", "North West", "Northern Cape", "Western Cape" })
+                {
+                    <option value="@province">@province</option>
+                }
+            </select>
+        </div>
+        <div class="filter-field">
+            <label asp-for="Filter.FromDate">From date</label>
+            <input asp-for="Filter.FromDate" type="date" class="form-control" />
+        </div>
+        <button class="btn btn-dark filter-submit" type="submit">Find events</button>
+    </form>
+
+    @if (Model.Events.Count == 0 && string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <div class="empty-state">
+            <span class="empty-mark">R.</span>
+            <h3>No events match those filters</h3>
+            <p>Try another sport or clear the filters to see more of the calendar.</p>
+            <a asp-action="Index" class="btn btn-outline-dark">Clear filters</a>
+        </div>
+    }
+    else
+    {
+        <div class="event-grid">
+            @foreach (var item in Model.Events)
+            {
+                <article class="event-card">
+                    <a class="event-art" asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId"
+                       aria-label="View @item.EventName">
+                        @if (!string.IsNullOrWhiteSpace(item.BannerImageUrl))
+                        {
+                            <img src="/media/events/@item.EventId" alt="" loading="lazy" />
+                        }
+                        else
+                        {
+                            <span class="art-watermark" aria-hidden="true">RD</span>
+                        }
+                        <span class="sport-label">@item.EventType</span>
+                        <span class="distance-label">@item.DistanceKm.ToString("0.##") <small>km</small></span>
+                    </a>
+                    <div class="event-card-body">
+                        <div class="event-date">@item.EventDate.ToString("ddd, dd MMM yyyy") <span>@item.StartTime.ToString("HH:mm")</span></div>
+                        <h3><a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId">@item.EventName</a></h3>
+                        <p class="event-location">@item.Location, @item.Province</p>
+                        <div class="event-card-bottom">
+                            <span>@item.CategoryCount categories</span>
+                            <a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId" class="arrow-link" aria-label="Details for @item.EventName">View event <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>
