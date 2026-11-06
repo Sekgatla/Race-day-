@@ -42,8 +42,32 @@ jobs:
       - name: Run API integration tests
         run: dotnet test "Part 2/RaceDay.sln" --configuration Release --no-build --logger "console;verbosity=normal"
 
-      - name: Build API container
-        run: docker build -f "Part 2/RaceDay.Api/Dockerfile" -t raceday-api:ci .
+      - name: Build and smoke-test Docker Compose stack
+        run: |
+          set -euo pipefail
+          docker compose up --build --detach
 
-      - name: Build MVC container
-        run: docker build -f "Part 3/RaceDay.Mvc/Dockerfile" -t raceday-mvc:ci .
+          for attempt in $(seq 1 45); do
+            page="$(curl --silent --show-error --fail --connect-timeout 2 --max-time 5 http://localhost:8080/ 2>/dev/null || true)"
+            if [[ -n "$page" ]] &&
+               grep -q "Upcoming events" <<< "$page" &&
+               ! grep -q "The event list will appear when the RaceDay API is available." <<< "$page"; then
+              echo "The MVC home page loaded and its API-backed event request succeeded."
+              exit 0
+            fi
+            echo "Waiting for the MVC site and API to become ready ($attempt/45)..."
+            sleep 2
+          done
+
+          echo "Docker Compose did not become ready within 90 seconds."
+          exit 1
+
+      - name: Show Docker Compose logs on failure
+        if: failure()
+        run: |
+          docker compose ps
+          docker compose logs --no-color
+
+      - name: Stop Docker Compose services
+        if: always()
+        run: docker compose down --volumes --remove-orphans || true
