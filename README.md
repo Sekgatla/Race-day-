@@ -207,7 +207,9 @@ The preview script builds the solution and starts the API and MVC site together.
 bash "Part 3/start-preview.sh"
 ```
 
-When both services are ready, open <http://localhost:3000>. The script runs the API on port 5001 and the MVC site on port 3000. In Visual Studio, open `Part 2/RaceDay.sln` to see the combined solution; use the preview script or Docker Compose below to start both services with the documented development settings.
+**Visual Studio:** open `Part 2/RaceDay.sln` and run `RaceDay.Mvc` with the `http` launch profile; the MVC site opens at <http://localhost:5076>. The MVC app expects the Part 2 API at `http://127.0.0.1:5001/`, so make sure the API is available at that address.
+
+**Bash preview:** `bash "Part 3/start-preview.sh"` starts the API on port 5001 and the MVC site on port 3000; open <http://localhost:3000>.
 
 The development preview uses the API's in-memory database and local image storage. Seeded sample accounts use the demo password shown in the API authentication section above. Data in the in-memory database resets when the API restarts.
 
