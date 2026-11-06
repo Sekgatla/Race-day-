@@ -4,6 +4,7 @@
 <p>
 <a href="https://github.com/Sekgatla/Race-day-/actions/workflows/part1-ci.yml"><img alt="Part 1 documentation check" src="https://github.com/Sekgatla/Race-day-/actions/workflows/part1-ci.yml/badge.svg"></a>
 <a href="https://github.com/Sekgatla/Race-day-/actions/workflows/part2-ci.yml"><img alt="Part 2 API build and tests" src="https://github.com/Sekgatla/Race-day-/actions/workflows/part2-ci.yml/badge.svg"></a>
+<a href="https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml"><img alt="Part 3 MVC, API, and Docker" src="https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml/badge.svg"></a>
 <img alt=".NET 8" src="https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white">
 <img alt="SQL Server" src="https://img.shields.io/badge/Database-SQL%20Server-CC2927?logo=microsoft-sql-server&logoColor=white">
 </p>
@@ -17,7 +18,7 @@
 - [Part 1: System Planning](#part-1-system-planning)
 - [Part 2: RESTful API](#part-2-restful-api)
   - [Technologies Used](#technologies-used)
-  - [Project Structure](#project-structure)
+  - [Repository Structure](#repository-structure)
   - [Database Setup](#database-setup)
   - [How to Run the API](#how-to-run-the-api)
   - [Authentication](#authentication)
@@ -27,12 +28,19 @@
   - [CI/CD](#cicd)
   - [GitHub Actions Screenshot](#github-actions-screenshot)
   - [Video Presentation](#video-presentation)
+- [Part 3: ASP.NET Core MVC Application](#part-3-aspnet-core-mvc-application)
+  - [User workflows](#user-workflows)
+  - [Run the application](#run-the-application)
+  - [Azure Blob Storage](#azure-blob-storage)
+  - [Docker](#docker)
+  - [Part 3 CI](#part-3-ci)
+  - [Part 3 video presentation](#part-3-video-presentation)
 - [AI Assistance and References](#ai-assistance-and-references)
 
 ## Project Description
 RaceDay is a web-based event management system for South African road running, walking, and cycling events. It replaces paper registrations, disconnected spreadsheets, and manual result tracking with one API-backed platform.
 
-The Portfolio of Evidence is built in stages: **Part 1** plans the data model and API; **Part 2** implements the RESTful API; **Part 3** will add the MVC application and Docker packaging. Part 2 follows the ERD, endpoint plan, and database design submitted in Part 1.
+The Portfolio of Evidence is built in stages: **Part 1** plans the data model and API, **Part 2** implements the RESTful API, and **Part 3** adds the ASP.NET Core MVC web application, Docker packaging, and image-storage integration. The MVC application consumes the Part 2 API; it does not connect to the database directly.
 
 ## User Roles
 | Role | Responsibilities |
@@ -68,19 +76,21 @@ The complete Part 2 source, tests, migration, and supporting documents are group
 | Testing | xUnit and ASP.NET Core integration-test host |
 | CI/CD | GitHub Actions |
 
-### Project Structure
+### Repository Structure
 ```text
 Race-day-/
-├── README.md                         # Single project and submission guide
-├── docs/                             # Part 1 planning evidence
-├── Part 2/                           # Complete Part 2 implementation
-│   ├── .config/dotnet-tools.json
-│   ├── RaceDay.sln
-│   ├── RaceDay.Api/                  # Controllers, data, models, security
+├── README.md                         # Project overview and submission guide
+├── docker-compose.yml                # Runs the API and MVC containers
+├── docs/                             # Part 1 planning and CI evidence
+├── Part 2/                           # REST API, shared contracts, and tests
+│   ├── RaceDay.sln                   # Combined API and MVC solution
+│   ├── RaceDay.Api/                  # API, data access, and security
 │   ├── RaceDay.Contracts/            # Shared request and response DTOs
-│   ├── RaceDay.Api.Tests/            # Automated API tests
+│   ├── RaceDay.Api.Tests/            # Automated API integration tests
 │   └── docs/                         # Part 2 supporting design documents
-└── .github/workflows/               # Part 1 and Part 2 CI workflows
+├── Part 3/                           # MVC application and image-storage scripts
+│   └── RaceDay.Mvc/                  # Controllers, views, and web services
+└── .github/workflows/                # Part 1, Part 2, and Part 3 CI workflows
 ```
 
 ### Database Setup
@@ -161,20 +171,21 @@ The [Part 2 GitHub Actions workflow](.github/workflows/part2-ci.yml) runs on pus
 The assessment guide requires at least **20 meaningful Part 2 commits**. Keep genuine implementation milestones in the history; do not manufacture filler commits.
 
 ### GitHub Actions Screenshot
-The supplied screenshot is the successful **Part 1** documentation workflow:
+The repository includes screenshots of successful Part 1 and Part 2 workflow runs:
 
-![Successful Part 1 GitHub Actions build](docs/ci-green-build.png)
+![Successful Part 1 documentation workflow](docs/ci-green-build.png)
 
-> The Part 2 workflow has passed;![Workflow Success](docs/IMG_5128.png)
+![Successful Part 2 API build and tests](docs/IMG_5128.png)
+
+For the latest Part 3 build and Docker image checks, use the Part 3 workflow badge above.
 
 
 ### Video Presentation
 The presentations should show the running API and explain the code and design decisions. The Part 2 guide expects a voiceover walkthrough of the repository, data model, authentication, role restrictions, Swagger, tests, and green CI build.
 
 - **Part 1:** [Unlisted presentation](https://youtu.be/SWQssPZqI5k)
-- **Part 2:** https://youtu.be/auyjNdyknvE?si=6pTxgPs6vYDiLbkX
+- **Part 2:** [Unlisted presentation](https://youtu.be/auyjNdyknvE?si=6pTxgPs6vYDiLbkX)
 
-- 
 ## Part 3: ASP.NET Core MVC Application
 
 Part 3 adds an MVC web application that consumes the Part 2 REST API. It does not access the database directly or duplicate API business rules.
@@ -190,11 +201,13 @@ Both roles sign in through the API. The MVC app keeps the bearer token in server
 
 ### Run the application
 
-The preview script builds the solution and starts the API and MVC site together:
+The preview script builds the solution and starts the API and MVC site together. From the repository root, run it in Bash (for example, Git Bash or WSL on Windows):
 
 ```bash
 bash "Part 3/start-preview.sh"
 ```
+
+When both services are ready, open <http://localhost:3000>. The script runs the API on port 5001 and the MVC site on port 3000. In Visual Studio, open `Part 2/RaceDay.sln` to see the combined solution; use the preview script or Docker Compose below to start both services with the documented development settings.
 
 The development preview uses the API's in-memory database and local image storage. Seeded sample accounts use the demo password shown in the API authentication section above. Data in the in-memory database resets when the API restarts.
 
@@ -231,9 +244,15 @@ Open `http://localhost:8080`. Separate multi-stage Dockerfiles are provided for 
 
 ### Part 3 CI
 
-The `part3-ci.yml` workflow restores and builds the combined solution, runs the API integration tests, and builds both Docker images. The source remains in the clearly named `Part 3/` folder.
+The [Part 3 GitHub Actions workflow](.github/workflows/part3-ci.yml) restores and builds the combined solution, runs the API integration tests, and builds the API and MVC Docker images. It runs for changes to the Part 2 or Part 3 source, the Compose file, or the workflow itself. A green workflow confirms those automated checks passed; it does not replace testing the running website and Docker containers locally.
 
-The assessment also calls for at least 20 meaningful GitHub commits. The supplied archives contain source snapshots but not their original commit history; make genuine commits as the work progresses rather than generating filler history.
+[![Part 3 MVC, API, and Docker](https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml/badge.svg)](https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml) · [View Part 3 workflow runs](https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml)
+
+The assessment requires at least **20 meaningful commits** for Part 3. Make genuine commits as the work progresses; do not create filler commits or rewrite the history to make it appear that work happened earlier.
+
+### Part 3 video presentation
+
+Add the unlisted YouTube link for the Part 3 demonstration here before submission. The video should show the running MVC application, explain how it consumes the API, demonstrate organiser and participant workflows, and show the Azure Blob Storage and Docker setup.
 
 ## AI Assistance and References
 Replit Agent assisted with planning,   and documentation for Part 2. 
