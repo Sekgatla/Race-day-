@@ -1,0 +1,22 @@
+name: Upload to Azure Blob Storage
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Azure Login & Upload
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          echo "Uploading files to Azure Blob Storage..."
+          az storage blob upload-batch \
+            --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+            --destination "raceday-media" \
+            --source "."
