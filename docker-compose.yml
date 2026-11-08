@@ -23,7 +23,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: 8080
-      RaceDay__ApiBaseUrl: http://api:8080/
+      ApiBaseUrl: http://api:8080/
     depends_on:
       - api
     ports:

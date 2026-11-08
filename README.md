@@ -207,7 +207,7 @@ The preview script builds the solution and starts the API and MVC site together.
 bash "Part 3/start-preview.sh"
 ```
 
-**Visual Studio:** open `Part 2/RaceDay.sln` and run `RaceDay.Mvc` with the `http` launch profile; the MVC site opens at <http://localhost:5076>. The MVC app expects the Part 2 API at `http://127.0.0.1:5001/`, so make sure the API is available at that address.
+**Visual Studio:** open `Part 2/RaceDay.sln` and run `RaceDay.Mvc` with the `http` launch profile; the MVC site opens at <http://localhost:5076>. The MVC app expects the Part 2 API at `http://localhost:5247/`, matching the API project's `http` launch profile, so start the API as well.
 
 **Bash preview:** `bash "Part 3/start-preview.sh"` starts the API on port 5001 and the MVC site on port 3000; open <http://localhost:3000>.
 
@@ -246,7 +246,7 @@ Open `http://localhost:8080`. Separate multi-stage Dockerfiles are provided for 
 
 ### Part 3 CI
 
-The [Part 3 GitHub Actions workflow](.github/workflows/part3-ci.yml) restores and builds the combined solution, runs the API integration tests, and builds the API and MVC Docker images. It runs for changes to the Part 2 or Part 3 source, the Compose file, or the workflow itself. A green workflow confirms those automated checks passed; it does not replace testing the running website and Docker containers locally.
+The [Part 3 GitHub Actions workflow](.github/workflows/part3-ci.yml) restores and builds the combined solution, runs API integration tests, and uses Docker Compose to build and start the API and MVC containers. Its smoke test checks that the MVC home page can reach the API, then stops the containers. It does not exercise authenticated Organiser/Participant workflows or verify a live Azure upload.
 
 [![Part 3 MVC, API, and Docker](https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml/badge.svg)](https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml) · [View Part 3 workflow runs](https://github.com/Sekgatla/Race-day-/actions/workflows/part3-ci.yml)
 

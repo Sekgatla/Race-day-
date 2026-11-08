@@ -14,7 +14,7 @@ if [[ -z "${RACEDAY_MEDIA_PROVIDER:-}" ]]; then
   fi
 fi
 export RaceDay__InMemoryDatabaseName=RaceDayPreview
-export RaceDay__ApiBaseUrl=http://127.0.0.1:5001/
+export ApiBaseUrl=http://127.0.0.1:5001/
 
 API_PID=""
 WEB_PID=""

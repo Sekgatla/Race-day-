@@ -14,28 +14,36 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.IdleTimeout = TimeSpan.FromHours(12);
 });
-builder.Services.AddHttpClient<RaceDayApiClient>((services, client) =>
+
+builder.Services.AddHttpClient<RaceDayApiClient>(client =>
 {
-    var configuration = services.GetRequiredService<IConfiguration>();
-    var address = configuration["RaceDay:ApiBaseUrl"] ?? "http://127.0.0.1:5001/";
+    var address = builder.Configuration["ApiBaseUrl"] ?? "http://localhost:5247/";
     client.BaseAddress = new Uri(address.EndsWith('/') ? address : address + '/');
     client.Timeout = TimeSpan.FromSeconds(20);
 });
 
 var app = builder.Build();
-if (!app.Environment.IsDevelopment())
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.Run();
 
 public partial class Program { }
