@@ -187,7 +187,7 @@ The presentations should show the running API and explain the code and design de
 
 - **Part 1:** [Unlisted presentation](https://youtu.be/SWQssPZqI5k)
 - **Part 2:** [Unlisted presentation](https://youtu.be/auyjNdyknvE?si=6pTxgPs6vYDiLbkX)
-- **Part 3:** Add your unlisted video link here.
+- **Part 3:** https://youtu.be/BrMJdw-gjDE?si=GmQU6zpOMB4qRHZI
 
 ## Part 3: ASP.NET Core MVC Application
 
@@ -257,7 +257,7 @@ The assessment requires at least **20 meaningful commits** for Part 3. Make genu
 
 ### Part 3 video presentation
 
-Add the unlisted YouTube link for the Part 3 demonstration here before submission. The video should show the running MVC application, explain how it consumes the API, demonstrate organiser and participant workflows, and show the Azure Blob Storage and Docker setup. 
+ https://youtu.be/BrMJdw-gjDE?si=GmQU6zpOMB4qRHZI
 
 ## AI Assistance and References
 Replit Agent assisted with planning,   and documentation for Part 2. 
