@@ -257,7 +257,7 @@ The assessment requires at least **20 meaningful commits** for Part 3. Make genu
 
 ### Part 3 video presentation
 
-Add the unlisted YouTube link for the Part 3 demonstration here before submission. The video should show the running MVC application, explain how it consumes the API, demonstrate organiser and participant workflows, and show the Azure Blob Storage and Docker setup. sekgatla yi
+Add the unlisted YouTube link for the Part 3 demonstration here before submission. The video should show the running MVC application, explain how it consumes the API, demonstrate organiser and participant workflows, and show the Azure Blob Storage and Docker setup. 
 
 ## AI Assistance and References
 Replit Agent assisted with planning,   and documentation for Part 2. 
