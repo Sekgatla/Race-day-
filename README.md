@@ -177,6 +177,8 @@ The repository includes screenshots of successful Part 1 and Part 2 workflow run
 
 ![Successful Part 2 API build and tests](docs/IMG_5128.png)
 
+![Successful Part 3 MVC, API, and Docker workflow](docs/part3-ci-success.png)
+
 For the latest Part 3 build and Docker image checks, use the Part 3 workflow badge above.
 
 
